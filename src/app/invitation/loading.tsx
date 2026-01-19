@@ -1,7 +1,7 @@
-import Flex from "@/components/shared/Flex";
-import ArrowLeftIcon from "@/components/shared/Icon/ArrowLeftIcon";
-import InvitationCardSkeleton from "@/components/shared/Skeleton/InvitationCardSkeleton";
-import Spacing from "@/components/shared/Spacing";
+import Flex from "@/shared/components/Flex";
+import ArrowLeftIcon from "@/shared/components/Icon/ArrowLeftIcon";
+import InvitationCardSkeleton from "@/shared/components/Skeleton/InvitationCardSkeleton";
+import Spacing from "@/shared/components/Spacing";
 
 export default function Loading() {
   return (

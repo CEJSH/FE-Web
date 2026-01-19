@@ -1,4 +1,4 @@
-import CardPageSkeleton from "@/components/shared/Skeleton/CardPageSkeleton";
+import CardPageSkeleton from "@/shared/components/Skeleton/CardPageSkeleton";
 import React from "react";
 
 export default function loading() {

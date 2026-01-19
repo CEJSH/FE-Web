@@ -1,17 +1,17 @@
 "use client";
-import SearchInput from "@/components/shared/Input/SearchBar";
-import Spacing from "@/components/shared/Spacing";
-import { userSearchAtom } from "@/atoms/friends";
+import SearchInput from "@/shared/components/Input/SearchBar";
+import Spacing from "@/shared/components/Spacing";
+import { userSearchAtom } from "@/features/friends/state/friends";
 import { useRecoilValue } from "recoil";
-import useDebounce from "@/hooks/debounce";
-import useSearchUsers from "@/components/users/hooks/useSearchUsers";
-import useInfiniteScroll from "@/hooks/useInfiniteScroll";
-import Flex from "@/components/shared/Flex";
-import Button from "@/components/shared/Button/Button";
-import UserListContainer from "@/components/users/UserListContainer";
-import HeaderWithBtn from "@/components/layout/Header/HeaderWithBtn";
+import useDebounce from "@/shared/hooks/debounce";
+import useSearchUsers from "@/features/users/components/hooks/useSearchUsers";
+import useInfiniteScroll from "@/shared/hooks/useInfiniteScroll";
+import Flex from "@/shared/components/Flex";
+import Button from "@/shared/components/Button/Button";
+import UserListContainer from "@/features/users/components/UserListContainer";
+import HeaderWithBtn from "@/shared/layout/Header/HeaderWithBtn";
 import { useRouter } from "next/navigation";
-import handleShare from "@/utils/handleShare";
+import handleShare from "@/shared/utils/handleShare";
 
 export default function SearchPage() {
   const search = useRecoilValue(userSearchAtom);

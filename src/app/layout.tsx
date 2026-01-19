@@ -4,8 +4,8 @@ import "./globals.css";
 import NextLayout, { NextProvider } from "./providers";
 import { GA_ID } from "../lib/gtm/gtm";
 import { GoogleAnalytics, GoogleTagManager } from "@next/third-parties/google";
-import { AuthProvider } from "@/components/shared/providers/AuthProvider";
-import { ProtectedRoute } from "@/components/ProtectedRoute";
+import { AuthProvider } from "@/shared/components/providers/AuthProvider";
+import { ProtectedRoute } from "@/features/auth/components/ProtectedRoute";
 
 const pretendard = localFont({
   src: "../fonts/PretendardVariable.woff2",

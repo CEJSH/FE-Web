@@ -1,4 +1,4 @@
-import { logger } from "@/utils/logger";
+import { logger } from "@/shared/utils/logger";
 
 type WindowWithDataLayer = Window & {
   dataLayer: Record<string, any>[];

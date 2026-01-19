@@ -4,12 +4,12 @@ import React, { useEffect } from "react";
 import dynamic from "next/dynamic";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useRecoilState } from "recoil";
-import { friendsSelectedTabAtom } from "@/atoms/friends";
-import GroupListSkeleton from "@/components/shared/Skeleton/GroupListSkeleton";
-import { SocialHeader } from "@/components/layout/Header/ScrollAwareHeader";
-import UserFriendsListContainer from "@/components/friends/UserFriendsListContainer";
+import { friendsSelectedTabAtom } from "@/features/friends/state/friends";
+import GroupListSkeleton from "@/shared/components/Skeleton/GroupListSkeleton";
+import { SocialHeader } from "@/shared/layout/Header/ScrollAwareHeader";
+import UserFriendsListContainer from "@/features/friends/components/UserFriendsListContainer";
 
-const Groups = dynamic(() => import("@/components/groups/Group"), {
+const Groups = dynamic(() => import("@/features/groups/components/Group"), {
   ssr: false,
   loading: () => <GroupListSkeleton />,
 });

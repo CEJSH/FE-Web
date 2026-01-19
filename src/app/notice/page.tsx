@@ -1,12 +1,13 @@
 "use client";
 import { useQueryClient } from "@tanstack/react-query";
 import { Suspense, useEffect } from "react";
-import useReadNotification from "@/components/notice/hooks/useReadNotification";
-import Flex from "@/components/shared/Flex";
-import NoticeContainer from "@/components/notice/NoticeContainer";
-import HeaderWithBtn from "@/components/layout/Header/HeaderWithBtn";
+import useReadNotification from "@/features/notice/components/hooks/useReadNotification";
+import Flex from "@/shared/components/Flex";
+import NoticeContainer from "@/features/notice/components/NoticeContainer";
+import HeaderWithBtn from "@/shared/layout/Header/HeaderWithBtn";
 import type * as lighty from "lighty-type";
 import type { InfiniteData } from "@tanstack/react-query";
+import { queryKeys } from "@/lib/queryKeys";
 
 export default function NoticePage() {
   const queryClient = useQueryClient();
@@ -14,7 +15,7 @@ export default function NoticePage() {
     onSuccess: () => {
       const now = new Date().toISOString();
       queryClient.setQueryData(
-        ["notification"],
+        queryKeys.notification.list(),
         (
           old:
             | InfiniteData<lighty.NotificationListResponse>

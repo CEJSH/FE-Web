@@ -3,24 +3,30 @@
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { useSearchParams } from "next/navigation";
 import type { User } from "lighty-type";
-import Flex from "@/components/shared/Flex";
-import HeaderWithBtn from "@/components/layout/Header/HeaderWithBtn";
-import FeedCard from "@/components/feeds/FeedCard";
-import type { Feed } from "@/models/feed";
-import InfoBar, { FriendsInfoContainer } from "@/components/feeds/InfoBar";
-import OptionsSelectIcon from "@/components/shared/Icon/OptionsSelectIcon";
-import FeedDropdownMenu from "@/components/shared/DropDownMenu/FeedDropDownMenu";
-import DotSpinnerSmall from "@/components/shared/Spinner/DotSpinnerSmall";
-import { MENU_CONFIGS } from "@/constants/menu-configs";
-import { useDropdown, useFriendsBox } from "@/hooks/useDropdown";
-import { bottomSheetStateAtom, selectedFeedIdAtom } from "@/atoms/feed";
-import useFeedDetail from "@/components/feeds/hooks/useFeedDetail";
-import { useCallback } from "react";
-import { useAuth } from "@/components/shared/providers/AuthProvider";
-import FeedPageSkeleton from "@/components/shared/Skeleton/FeedSkeleton";
-import CommentContainer from "@/components/shared/Comment/CommentContainer";
-import ModalWithReport from "@/components/shared/ModalWithReport";
-import useFeed from "@/hooks/useFeed";
+import Flex from "@/shared/components/Flex";
+import HeaderWithBtn from "@/shared/layout/Header/HeaderWithBtn";
+import FeedCard from "@/features/feed/components/FeedCard";
+import InfoBar, { FriendsInfoContainer } from "@/features/feed/components/InfoBar";
+import OptionsSelectIcon from "@/shared/components/Icon/OptionsSelectIcon";
+import FeedDropdownMenu from "@/shared/components/DropDownMenu/FeedDropDownMenu";
+import DotSpinnerSmall from "@/shared/components/Spinner/DotSpinnerSmall";
+import { MENU_CONFIGS } from "@/shared/constants/menu-configs";
+import { useDropdown, useFriendsBox } from "@/shared/hooks/useDropdown";
+import { bottomSheetStateAtom, selectedFeedIdAtom } from "@/features/feed/state/feed";
+import useFeedDetail from "@/features/feed/components/hooks/useFeedDetail";
+import { useAuth } from "@/shared/components/providers/AuthProvider";
+import FeedPageSkeleton from "@/shared/components/Skeleton/FeedSkeleton";
+import dynamic from "next/dynamic";
+import useFeed from "@/features/feed/hooks/useFeed";
+
+const CommentContainer = dynamic(
+  () => import("@/shared/components/Comment/CommentContainer"),
+  { ssr: false }
+);
+const ModalWithReport = dynamic(
+  () => import("@/shared/components/ModalWithReport"),
+  { ssr: false }
+);
 
 export type GroupEditProps = {
   id: string;
@@ -56,13 +62,6 @@ export default function FeedDetailPage() {
 
   const { deleteFeed, deleteComment, hideFeed, report } = useFeed();
 
-  const handleFeedSelect = useCallback(
-    (feed: Feed) => {
-      setSelectedFeedId(feed.id);
-    },
-    [setSelectedFeedId]
-  );
-
   if (!selectedFeed) {
     return <FeedPageSkeleton />;
   }
@@ -85,10 +84,7 @@ export default function FeedDetailPage() {
             }}
           >
             <div key={id} className="relative">
-              <FeedCard
-                feed={selectedFeed}
-                onSelect={handleFeedSelect}
-              >
+              <FeedCard feed={selectedFeed}>
                 <InfoBar
                   ref={fBtnRef}
                   onClick={(e) => {
@@ -124,7 +120,7 @@ export default function FeedDetailPage() {
                     toggleDropdown(selectedFeed.id);
                     setSelectedFeedId(selectedFeed.id);
                   }}
-                  className="flex justify-center items-center bg-transparent border-0 p-0"
+                  className="flex justify-center items-center bg-transparent border-0 p-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-grayscale-900"
                 >
                   <OptionsSelectIcon />
                 </button>

@@ -1,19 +1,20 @@
 "use client";
 import React, { useState } from "react";
-import ChoosingGatheringToDecorate from "@/components/cards/ChoosingGatheringToDecorate";
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
-import FramePageSkeleton from "@/components/shared/Skeleton/FramePageSkeleton";
-import HeaderWithBtn from "@/components/layout/Header/HeaderWithBtn";
-import DotSpinner from "@/components/shared/Spinner/DotSpinner";
+import FramePageSkeleton from "@/shared/components/Skeleton/FramePageSkeleton";
+import HeaderWithBtn from "@/shared/layout/Header/HeaderWithBtn";
+import DotSpinner from "@/shared/components/Spinner/DotSpinner";
 
-const ChooseFrame = dynamic(() => import("@/components/cards/ChooseFrame"), {
+import ChoosingGatheringToDecorate from "@/features/card/components/ChoosingGatheringToDecorate";
+
+const ChooseFrame = dynamic(() => import("@/features/card/components/ChooseFrame"), {
   ssr: false,
   loading: () => <FramePageSkeleton />,
 });
 
 const DecorateWithStickers = dynamic(
-  () => import("@/components/cards/DecorateWithStickers"),
+  () => import("@/features/card/components/DecorateWithStickers"),
   {
     ssr: false,
     loading: () => <DotSpinner />,

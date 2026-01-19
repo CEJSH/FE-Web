@@ -1,23 +1,23 @@
 "use client";
-import InvitationCard from "@/components/invitation/InvitationCard";
-import Spacing from "@/components/shared/Spacing";
-import React, { useEffect, useMemo, useRef, useState } from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
-import { useTabs } from "@/hooks/useTabs";
-import useReceivedInvitationToGathering from "@/components/gathering/hooks/useReceivedInvitationToGathering";
-import useSentInvitationToGathering from "@/components/gathering/hooks/useSentInvitationToGathering";
-import InvitationModal from "@/components/invitation/InvitationModal";
-import Panel from "@/components/shared/Panel/Panel";
-import DotSpinner from "@/components/shared/Spinner/DotSpinner";
-import { useInfiniteScrollByRef } from "@/hooks/useInfiniteScroll";
-import useReadNotification from "@/components/notice/hooks/useReadNotification";
+import React, { useEffect, useRef, useState } from "react";
+import { useTabs } from "@/shared/hooks/useTabs";
+import useReceivedInvitationToGathering from "@/features/gathering/components/hooks/useReceivedInvitationToGathering";
+import useSentInvitationToGathering from "@/features/gathering/components/hooks/useSentInvitationToGathering";
+import dynamic from "next/dynamic";
+import Panel from "@/shared/components/Panel/Panel";
+import { useInfiniteScrollByRef } from "@/shared/hooks/useInfiniteScroll";
+import useReadNotification from "@/features/notice/components/hooks/useReadNotification";
 import { useQueryClient } from "@tanstack/react-query";
-import NoInvitation from "@/components/invitation/NoInvitation";
-import InvitationCardSkeleton from "@/components/shared/Skeleton/InvitationCardSkeleton";
-import HeaderWithBtn from "@/components/layout/Header/HeaderWithBtn";
+import HeaderWithBtn from "@/shared/layout/Header/HeaderWithBtn";
 import type * as lighty from "lighty-type";
 import type { InfiniteData } from "@tanstack/react-query";
+import { queryKeys } from "@/lib/queryKeys";
+import InvitationSwiper from "@/features/invitation/components/InvitationSwiper";
+
+const InvitationModal = dynamic(
+  () => import("@/features/invitation/components/InvitationModal"),
+  { ssr: false }
+);
 
 export default function InvitationPage() {
   const queryClient = useQueryClient();
@@ -56,12 +56,9 @@ export default function InvitationPage() {
     onSuccess: () => {
       const now = new Date().toISOString();
       queryClient.setQueryData(
-        ["notification"],
+        queryKeys.notification.list(),
         (
-          old:
-            | InfiniteData<lighty.NotificationListResponse>
-            | undefined
-            | null
+          old: InfiniteData<lighty.NotificationListResponse> | undefined | null
         ) => {
           if (!old) return old;
           return {
@@ -77,83 +74,6 @@ export default function InvitationPage() {
       );
     },
   });
-
-  const renderSwiper = useMemo(() => {
-    return (
-      <Swiper
-        onSwiper={(swiper) => {
-          swiperRef.current = swiper;
-        }}
-        onSlideChange={(swiper) => {
-          handleSlideChange(swiper.activeIndex);
-        }}
-        slidesPerView={1}
-        spaceBetween={2}
-        className="custom-swiper w-full !h-dvh"
-      >
-        <SwiperSlide>
-          <div
-            ref={containerRef_r}
-            className="pt-safe-top h-dvh overflow-y-auto no-scrollbar"
-          >
-            {received && received.length > 0 ? (
-              <>
-                <Spacing size={110} />
-                {received?.map((invitation) => {
-                  return (
-                    <React.Fragment key={invitation.id}>
-                      <InvitationCard
-                        onClickOpen={setModalOpen}
-                        invitation={invitation}
-                      />
-                      <Spacing size={24} />
-                    </React.Fragment>
-                  );
-                })}
-                {isFetching && <InvitationCardSkeleton />}
-              </>
-            ) : (
-              <NoInvitation type="RECEIVED" />
-            )}
-          </div>
-        </SwiperSlide>
-        <SwiperSlide>
-          <div
-            ref={containerRef}
-            className="pt-safe-top h-dvh overflow-y-auto no-scrollbar"
-          >
-            {sent && sent.length > 0 ? (
-              <>
-                <Spacing size={110} />
-                {sent?.map((invitation) => {
-                  return (
-                    <React.Fragment key={invitation.gatheringId}>
-                      <InvitationCard
-                        onClickOpen={setModalOpen}
-                        invitation={invitation}
-                      />
-                      <Spacing size={24} />
-                    </React.Fragment>
-                  );
-                })}
-                {isFetching_s && <DotSpinner />}
-              </>
-            ) : (
-              <NoInvitation type="SENT" />
-            )}
-          </div>
-        </SwiperSlide>
-      </Swiper>
-    );
-  }, [
-    received,
-    sent,
-    selectedTab,
-    swiperRef,
-    handleSlideChange,
-    isFetching,
-    isFetching_s,
-  ]);
 
   useEffect(() => {
     read();
@@ -173,7 +93,17 @@ export default function InvitationPage() {
           />
         </div>
       </HeaderWithBtn>
-      {renderSwiper}
+      <InvitationSwiper
+        swiperRef={swiperRef}
+        handleSlideChange={handleSlideChange}
+        received={received}
+        sent={sent}
+        isFetchingReceived={isFetching}
+        isFetchingSent={isFetching_s}
+        onOpenModal={setModalOpen}
+        containerRefReceived={containerRef_r}
+        containerRefSent={containerRef}
+      />
       {isModalOpen ? (
         <InvitationModal
           onClickClose={setModalOpen}

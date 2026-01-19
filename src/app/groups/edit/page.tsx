@@ -1,52 +1,91 @@
 "use client";
-import { originalGroupMembersAtom, selectedGroupAtom } from "@/atoms/group";
-import InviteFriends from "@/components/friends/InviteFriends";
-import AddGroupPhoto from "@/components/groups/AddGroupPhoto";
-import FixedBottomButton from "@/components/shared/Button/FixedBottomButton";
-import Flex from "@/components/shared/Flex";
-import FeedIcon from "@/components/shared/Icon/FeedIcon";
-import PencilIcon from "@/components/shared/Icon/PencilIcon";
-import UserIcon from "@/components/shared/Icon/UserIcon";
-import Input from "@/components/shared/Input/Input";
-import Spacing from "@/components/shared/Spacing";
-import { useEffect, useState } from "react";
+import InviteFriends from "@/features/friends/components/InviteFriends";
+import AddGroupPhoto from "@/features/groups/components/AddGroupPhoto";
+import FixedBottomButton from "@/shared/components/Button/FixedBottomButton";
+import Flex from "@/shared/components/Flex";
+import FeedIcon from "@/shared/components/Icon/FeedIcon";
+import PencilIcon from "@/shared/components/Icon/PencilIcon";
+import UserIcon from "@/shared/components/Icon/UserIcon";
+import Input from "@/shared/components/Input/Input";
+import Spacing from "@/shared/components/Spacing";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useRecoilValue } from "recoil";
 import { UpdateGroupRequest } from "@/models/group";
-import useUpdateGroup from "@/components/groups/hooks/useUpdateGroup";
-import { lightyToast } from "@/utils/toast";
-import { useRouter } from "next/navigation";
+import useUpdateGroup from "@/features/groups/components/hooks/useUpdateGroup";
+import { lightyToast } from "@/shared/utils/toast";
+import { useRouter, useSearchParams } from "next/navigation";
 import type * as lighty from "lighty-type";
-import AddOnlyFriendsSlider from "@/components/groups/AddOnlyFriendsSlider";
-import HeaderWithBtn from "@/components/layout/Header/HeaderWithBtn";
+import AddOnlyFriendsSlider from "@/features/groups/components/AddOnlyFriendsSlider";
+import HeaderWithBtn from "@/shared/layout/Header/HeaderWithBtn";
 import { useQueryClient } from "@tanstack/react-query";
-import { selectedFriendsAtom } from "@/atoms/friends";
-import { postGroupMember } from "@/remote/group";
-import { logger } from "@/utils/logger";
+import { selectedFriendsAtom } from "@/features/friends/state/friends";
+import { postGroupMember } from "@/features/groups/api/group";
+import { logger } from "@/shared/utils/logger";
+import { queryKeys } from "@/lib/queryKeys";
+import { useGroupDetail } from "@/features/groups/components/hooks/useGroupDetail";
+import { useAuth } from "@/shared/components/providers/AuthProvider";
+import useFriends from "@/features/friends/components/hooks/useFriends";
 
 export default function GroupEditPage() {
   const queryClient = useQueryClient();
-  const friendsToAdd = useRecoilValue(selectedFriendsAtom);
-  const selectedGroup = useRecoilValue<UpdateGroupRequest>(selectedGroupAtom);
+  const friendIdsToAdd = useRecoilValue(selectedFriendsAtom);
   const [step, setStep] = useState(1);
   const router = useRouter();
-  const [groupInfo, setGroupInfo] = useState(selectedGroup);
-  const groupMembers = useRecoilValue<lighty.User[] | null>(
-    originalGroupMembersAtom
-  );
+  const searchParams = useSearchParams();
+  const groupId = searchParams.get("id") ?? "";
+  const hasInitializedRef = useRef(false);
+  const { data: groupDetail } = useGroupDetail(groupId);
+  const { userInfo } = useAuth();
+  const { data: allFriends } = useFriends({
+    userId: userInfo?.accountId ?? "",
+  });
+  const [groupInfo, setGroupInfo] = useState<UpdateGroupRequest>({
+    groupId,
+    name: "",
+    description: "",
+    groupImageUrl: "",
+  });
+  const [originalMembers, setOriginalMembers] = useState<lighty.User[]>([]);
 
   useEffect(() => {
-    if (!selectedGroup) {
+    if (!groupId) {
       router.replace("/social?tab=group");
       lightyToast.error("그룹 정보를 찾을 수 없습니다.");
     }
-  }, [selectedGroup, router]);
+  }, [groupId, router]);
+
+  useEffect(() => {
+    if (!groupDetail || hasInitializedRef.current) return;
+    setGroupInfo({
+      groupId: groupDetail.id,
+      name: groupDetail.name,
+      description: groupDetail.description,
+      groupImageUrl: groupDetail.groupImageUrl,
+    });
+    setOriginalMembers(groupDetail.members ?? []);
+    hasInitializedRef.current = true;
+  }, [groupDetail]);
+
+  const friendsToAdd = useMemo(() => {
+    if (!allFriends || friendIdsToAdd.length === 0) return [];
+    const selectedSet = new Set(friendIdsToAdd);
+    return allFriends.filter((friend) => selectedSet.has(friend.id));
+  }, [allFriends, friendIdsToAdd]);
+
+  const memberCandidates = useMemo(() => {
+    const merged = new Map<string, lighty.User>();
+    [...originalMembers, ...friendsToAdd].forEach((member) =>
+      merged.set(member.id, member)
+    );
+    return Array.from(merged.values());
+  }, [friendsToAdd, originalMembers]);
 
   const updateSuccessHandler = async (data: { message: string }) => {
-    if (friendsToAdd !== null && friendsToAdd.length > 0) {
+    if (friendIdsToAdd.length > 0) {
       try {
         await postGroupMember({
           groupId: groupInfo.groupId,
-          userIds: friendsToAdd.map((friend) => friend.id),
+          userIds: friendIdsToAdd,
         });
       } catch (e) {
         lightyToast.error("그룹원 추가 실패");
@@ -54,7 +93,7 @@ export default function GroupEditPage() {
       }
     }
     await queryClient.invalidateQueries({
-      queryKey: ["groups"],
+      queryKey: queryKeys.group.list(),
     });
     lightyToast.success(data.message);
   };
@@ -74,6 +113,10 @@ export default function GroupEditPage() {
     updateGroup();
     router.replace("/social?tab=group");
   };
+
+  if (!groupDetail) {
+    return null;
+  }
 
   if (step === 1) {
     return (
@@ -127,7 +170,7 @@ export default function GroupEditPage() {
             <span>그룹 친구</span>
           </Flex>
           <Spacing size={8} />
-          <AddOnlyFriendsSlider setStep={setStep} />
+          <AddOnlyFriendsSlider setStep={setStep} members={memberCandidates} />
         </form>
         <FixedBottomButton
           label={"수정 완료"}
@@ -141,7 +184,7 @@ export default function GroupEditPage() {
       <InviteFriends
         setStep={setStep}
         type="groupEdit"
-        exceptFriends={groupMembers}
+        exceptFriends={originalMembers}
       />
     );
   }

@@ -32,7 +32,7 @@
     "**/*.test.tsx",
     "**/*.spec.ts",
     "**/*.spec.tsx",
-    "src/constants/terms.ts"
+    "src/shared/constants/terms.ts"
   ],
   "exclude": ["node_modules"]
 }

@@ -1,11 +1,11 @@
 "use client";
-import ToggleButton from "@/components/shared/Button/ToggleButton";
-import Flex from "@/components/shared/Flex";
-import HeaderWithBtn from "@/components/layout/Header/HeaderWithBtn";
-import Modal from "@/components/shared/Modal/Modal";
-import { useReactNativeWebView } from "@/components/shared/providers/ReactNativeWebViewProvider";
-import Spacing from "@/components/shared/Spacing";
-import { patchNotificationToken } from "@/remote/users";
+import ToggleButton from "@/shared/components/Button/ToggleButton";
+import Flex from "@/shared/components/Flex";
+import HeaderWithBtn from "@/shared/layout/Header/HeaderWithBtn";
+import Modal from "@/shared/components/Modal/Modal";
+import { useReactNativeWebView } from "@/shared/components/providers/ReactNativeWebViewProvider";
+import Spacing from "@/shared/components/Spacing";
+import { patchNotificationToken } from "@/features/users/api/users";
 import { requestNotificationPermission } from "@/webview/actions";
 import { WEBVIEW_EVENT } from "@/webview/types/events";
 import { useRouter } from "next/navigation";

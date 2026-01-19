@@ -1,6 +1,6 @@
 import dynamic from "next/dynamic";
 
-const FeedPage = dynamic(() => import("@/components/feeds/FeedPage/FeedPage"), {
+const FeedPage = dynamic(() => import("@/features/feed/components/FeedPage/FeedPage"), {
   ssr: false,
 });
 

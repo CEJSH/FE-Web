@@ -1,15 +1,15 @@
 "use client";
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
-import DotSpinner from "@/components/shared/Spinner/DotSpinner";
-import NewGroupForm from "@/components/groups/NewGroupForm";
+import DotSpinner from "@/shared/components/Spinner/DotSpinner";
+import NewGroupForm from "@/features/groups/components/NewGroupForm";
 import { useSetRecoilState } from "recoil";
-import { newGroupAtom } from "@/atoms/group";
+import { newGroupAtom } from "@/features/groups/state/group";
 import { CreateGroupRequest } from "@/models/group";
-import HeaderWithBtn from "@/components/layout/Header/HeaderWithBtn";
+import HeaderWithBtn from "@/shared/layout/Header/HeaderWithBtn";
 
 const InviteFriends = dynamic(
-  () => import("@/components/friends/InviteFriends"),
+  () => import("@/features/friends/components/InviteFriends"),
   { ssr: false, loading: () => <DotSpinner /> }
 );
 

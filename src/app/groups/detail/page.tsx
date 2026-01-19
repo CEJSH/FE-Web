@@ -1,30 +1,31 @@
 "use client";
 
 import { useRecoilState, useResetRecoilState, useRecoilValue } from "recoil";
-import useDeleteGroup from "@/components/groups/hooks/useDeleteGroup";
+import useDeleteGroup from "@/features/groups/components/hooks/useDeleteGroup";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import useAddGroupMember from "@/components/groups/hooks/useAddGroupMember";
-import { modalStateAtom, reportInfoAtom, reportModalAtom } from "@/atoms/modal";
-import useExitGroup from "@/components/groups/hooks/useExitGroup";
-import { lightyToast } from "@/utils/toast";
-import DotSpinner from "@/components/shared/Spinner/DotSpinner";
+import useAddGroupMember from "@/features/groups/components/hooks/useAddGroupMember";
+import { modalStateAtom, reportInfoAtom, reportModalAtom } from "@/shared/state/modal";
+import useExitGroup from "@/features/groups/components/hooks/useExitGroup";
+import { lightyToast } from "@/shared/utils/toast";
+import DotSpinner from "@/shared/components/Spinner/DotSpinner";
 import type { User } from "lighty-type";
-import Flex from "@/components/shared/Flex";
-import GroupOptions from "@/components/groups/GroupOptions";
-import { useAuth } from "@/components/shared/providers/AuthProvider";
-import GroupDetailContainer from "@/components/groups/GroupDetailContainer";
+import Flex from "@/shared/components/Flex";
+import GroupOptions from "@/features/groups/components/GroupOptions";
+import { useAuth } from "@/shared/components/providers/AuthProvider";
+import GroupDetailContainer from "@/features/groups/components/GroupDetailContainer";
 import dynamic from "next/dynamic";
-import { selectedFriendsAtom, selectedFriendIdsSelector } from "@/atoms/friends";
-import { useGroupDetail } from "@/components/groups/hooks/useGroupDetail";
-import HeaderWithBtn from "@/components/layout/Header/HeaderWithBtn";
-import DetailSkeleton from "@/components/shared/Skeleton/DetailSkeleton";
-import useReport from "@/components/report/hooks/useReport";
-import ModalWithReport from "@/components/shared/ModalWithReport";
+import { selectedFriendsAtom, selectedFriendIdsSelector } from "@/features/friends/state/friends";
+import { useGroupDetail } from "@/features/groups/components/hooks/useGroupDetail";
+import HeaderWithBtn from "@/shared/layout/Header/HeaderWithBtn";
+import DetailSkeleton from "@/shared/components/Skeleton/DetailSkeleton";
+import useReport from "@/features/report/components/hooks/useReport";
+import ModalWithReport from "@/shared/components/ModalWithReport";
+import { queryKeys } from "@/lib/queryKeys";
 
 const SelectFriendsContainer = dynamic(
-  () => import("@/components/friends/SelectFriendsContainer"),
+  () => import("@/features/friends/components/SelectFriendsContainer"),
   {
     ssr: false,
     loading: () => <DotSpinner />,
@@ -58,8 +59,8 @@ export default function GroupDetailPage() {
 
   const handleDeleteSuccess = async () => {
     await Promise.all([
-      queryClient.invalidateQueries({ queryKey: ["groups"] }),
-      queryClient.invalidateQueries({ queryKey: ["user/detail"] }),
+      queryClient.invalidateQueries({ queryKey: queryKeys.group.list() }),
+      queryClient.invalidateQueries({ queryKey: queryKeys.user.detail() }),
     ]);
     lightyToast.success("그룹 나가기/삭제 성공");
     router.replace("/social");
@@ -67,7 +68,7 @@ export default function GroupDetailPage() {
 
   const addMemberSuccessHandler = async (data: { message: string }) => {
     await queryClient.invalidateQueries({
-      queryKey: ["groups"],
+      queryKey: queryKeys.group.list(),
     });
     lightyToast.success(data.message);
     setSelectedFriends([]);
@@ -76,10 +77,10 @@ export default function GroupDetailPage() {
   const reportSuccessHandler = async (data: { message: string }) => {
     await Promise.all([
       queryClient.invalidateQueries({
-        queryKey: ["groups"],
+        queryKey: queryKeys.group.list(),
       }),
       queryClient.invalidateQueries({
-        queryKey: ["user/detail"],
+        queryKey: queryKeys.user.detail(),
       }),
     ]);
     router.replace("/social?tab=group");

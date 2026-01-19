@@ -1,7 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server";
 import sharp from "sharp";
 import { createHash } from "crypto";
-import { logger } from "@/utils/logger";
+import { logger } from "@/shared/utils/logger";
 import { LRUCache } from "lru-cache";
 
 export const dynamic = "force-dynamic";

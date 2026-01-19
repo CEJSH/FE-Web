@@ -1,4 +1,4 @@
-import DetailSkeleton from "@/components/shared/Skeleton/DetailSkeleton";
+import DetailSkeleton from "@/shared/components/Skeleton/DetailSkeleton";
 
 export default function Loading() {
   return <DetailSkeleton />;

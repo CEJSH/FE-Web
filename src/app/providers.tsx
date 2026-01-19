@@ -16,12 +16,12 @@ import { usePathname } from "next/navigation";
 import { ToastContainer, Zoom } from "react-toastify";
 import clsx from "clsx";
 import { GA_ID } from "../lib/gtm/gtm";
-import useMaze from "@/hooks/useMaze";
-import useScrollToTop from "@/hooks/useScrollToTop";
+import useMaze from "@/shared/hooks/useMaze";
+import useScrollToTop from "@/shared/hooks/useScrollToTop";
 import dynamic from "next/dynamic";
-import { ReactNativeWebViewProvider } from "@/components/shared/providers/ReactNativeWebViewProvider";
+import { ReactNativeWebViewProvider } from "@/shared/components/providers/ReactNativeWebViewProvider";
 
-const NavBar = dynamic(() => import("@/components/layout/NavBar"), {
+const NavBar = dynamic(() => import("@/shared/layout/NavBar"), {
   ssr: false,
 });
 

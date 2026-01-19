@@ -1,12 +1,12 @@
 "use client";
 
-import { useKakaoAuth } from "@/hooks/useKakaoQuery";
+import { useKakaoAuth } from "@/features/auth/hooks/useKakaoQuery";
 import { useEffect, useState } from "react";
 import type { KakaoAuthResponse } from "@/models/user";
 import { useSearchParams } from "next/navigation";
-import { useLogin } from "@/hooks/useLogin";
-import { lightyToast } from "@/utils/toast";
-import STORAGE_KEYS from "@/constants/storageKeys";
+import { useLogin } from "@/features/auth/hooks/useLogin";
+import { lightyToast } from "@/shared/utils/toast";
+import STORAGE_KEYS from "@/shared/constants/storageKeys";
 
 export default function Page() {
   const searchParams = useSearchParams();

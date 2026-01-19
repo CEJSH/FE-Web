@@ -3,28 +3,28 @@
 import React, { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { modalStateAtom } from "@/atoms/modal";
-import { lightyToast } from "@/utils/toast";
-import useGatheringDetail from "@/components/gathering/hooks/useGatheringDetail";
-import useDeleteGathering from "@/components/gathering/hooks/useDeleteGathering";
-import GatheringDetail from "@/components/gathering/GatheringDetail";
-import TabParamHandler from "@/components/shared/TabParamHandler";
+import { modalStateAtom } from "@/shared/state/modal";
+import { lightyToast } from "@/shared/utils/toast";
+import useGatheringDetail from "@/features/gathering/components/hooks/useGatheringDetail";
+import useDeleteGathering from "@/features/gathering/components/hooks/useDeleteGathering";
+import GatheringDetail from "@/features/gathering/components/GatheringDetail";
+import TabParamHandler from "@/shared/components/TabParamHandler";
 import dynamic from "next/dynamic";
-import HeaderWithBtn from "@/components/layout/Header/HeaderWithBtn";
-import handleShare from "@/utils/handleShare";
-import { useAuth } from "@/components/shared/providers/AuthProvider";
-import ShareIcon from "@/components/shared/Icon/ShareIcon";
+import HeaderWithBtn from "@/shared/layout/Header/HeaderWithBtn";
+import handleShare from "@/shared/utils/handleShare";
+import { useAuth } from "@/shared/components/providers/AuthProvider";
+import ShareIcon from "@/shared/components/Icon/ShareIcon";
 import { MENU_TYPES } from "@/models/dropdown";
-import { isIntersectingAtom } from "@/atoms/scroll";
-import DetailSkeleton from "@/components/shared/Skeleton/DetailSkeleton";
-import MODAL_CONFIGS from "@/constants/modal-configs";
+import { isIntersectingAtom } from "@/shared/state/scroll";
+import DetailSkeleton from "@/shared/components/Skeleton/DetailSkeleton";
+import MODAL_CONFIGS from "@/shared/constants/modal-configs";
 
-const Modal = dynamic(() => import("@/components/shared/Modal/Modal"), {
+const Modal = dynamic(() => import("@/shared/components/Modal/Modal"), {
   ssr: false,
 });
 
 const GatheringOptions = dynamic(
-  () => import("@/components/gathering/GatheringOption"),
+  () => import("@/features/gathering/components/GatheringOption"),
   { ssr: false }
 );
 

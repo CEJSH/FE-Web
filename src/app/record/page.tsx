@@ -2,19 +2,19 @@
 import React, { useState } from "react";
 import dynamic from "next/dynamic";
 import { useRecoilState } from "recoil";
-import { recordStepAtom } from "@/atoms/record";
-import ChoosingKindOfMemory from "../../components/feeds/ChoosingKindOfMemory";
-import ChoosingGatheringToRecord from "@/components/feeds/ChoosingGatheringToRecord";
-import CreatingFeed from "@/components/feeds/CreatingFeed";
-import CreatingFeedNoGathering from "@/components/feeds/CreatingFeedNoGathering";
-import HeaderWithBtn from "@/components/layout/Header/HeaderWithBtn";
+import { recordStepAtom } from "@/features/feed/state/record";
+import ChoosingKindOfMemory from "@/features/feed/components/ChoosingKindOfMemory";
+import ChoosingGatheringToRecord from "@/features/feed/components/ChoosingGatheringToRecord";
+import CreatingFeed from "@/features/feed/components/CreatingFeed";
+import CreatingFeedNoGathering from "@/features/feed/components/CreatingFeedNoGathering";
+import HeaderWithBtn from "@/shared/layout/Header/HeaderWithBtn";
 import { useRouter, useSearchParams } from "next/navigation";
-import Spacing from "@/components/shared/Spacing";
+import Spacing from "@/shared/components/Spacing";
 import clsx from "clsx";
-import FriendToShareSkeleton from "@/components/shared/Skeleton/FriendToShareSkeleton";
+import FriendToShareSkeleton from "@/shared/components/Skeleton/FriendToShareSkeleton";
 
 const ChooseFriendToShare = dynamic(
-  () => import("@/components/feeds/ChooseFriendToShare"),
+  () => import("@/features/feed/components/ChooseFriendToShare"),
   {
     loading: () => <FriendToShareSkeleton />,
     ssr: false,

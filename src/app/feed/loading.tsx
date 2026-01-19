@@ -1,4 +1,4 @@
-import FeedPageSkeleton from "@/components/shared/Skeleton/FeedSkeleton";
+import FeedPageSkeleton from "@/shared/components/Skeleton/FeedSkeleton";
 
 export default function loading() {
   return <FeedPageSkeleton />;

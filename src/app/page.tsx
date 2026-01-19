@@ -1,10 +1,10 @@
 "use client";
-import LogIn from "@/components/LogIn";
-import Flex from "@/components/shared/Flex";
-import { LargeLightyLogo } from "@/components/shared/Icon/LargeLightyLogo";
-import LightyIcon from "@/components/shared/Icon/LightyIcon";
-import { useAuth } from "@/components/shared/providers/AuthProvider";
-import { useReactNativeWebView } from "@/components/shared/providers/ReactNativeWebViewProvider";
+import LogIn from "@/features/auth/components/LogIn";
+import Flex from "@/shared/components/Flex";
+import { LargeLightyLogo } from "@/shared/components/Icon/LargeLightyLogo";
+import LightyIcon from "@/shared/components/Icon/LightyIcon";
+import { useAuth } from "@/shared/components/providers/AuthProvider";
+import { useReactNativeWebView } from "@/shared/components/providers/ReactNativeWebViewProvider";
 import { openPrivacyPolicyMobile, openTermsMobile } from "@/webview/actions";
 import { Suspense } from "react";
 

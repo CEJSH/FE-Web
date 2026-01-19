@@ -3,28 +3,28 @@ import dynamic from "next/dynamic";
 import React, { useEffect, useState } from "react";
 import { useRecoilState, useResetRecoilState } from "recoil";
 import type * as lighty from "lighty-type";
-import { newGatheringInfo } from "@/atoms/gathering";
-import { selectedFriendsAtom } from "@/atoms/friends";
-import { lightyToast } from "@/utils/toast";
-import useMakeGathering from "@/components/gathering/hooks/useMakeGathering";
-import DotSpinner from "@/components/shared/Spinner/DotSpinner";
-import GatheringForm from "@/components/gathering/GatheringForm";
+import { newGatheringInfo } from "@/features/gathering/state/gathering";
+import { selectedFriendsAtom } from "@/features/friends/state/friends";
+import { lightyToast } from "@/shared/utils/toast";
+import useMakeGathering from "@/features/gathering/components/hooks/useMakeGathering";
+import DotSpinner from "@/shared/components/Spinner/DotSpinner";
+import GatheringForm from "@/features/gathering/components/GatheringForm";
 
 const components = [
-  dynamic(() => import("@/components/gathering/MakeGatheringStatus"), {
+  dynamic(() => import("@/features/gathering/components/MakeGatheringStatus"), {
     loading: () => <DotSpinner />,
     ssr: false,
   }),
   () => <></>,
-  dynamic(() => import("@/components/friends/InviteFriends"), {
+  dynamic(() => import("@/features/friends/components/InviteFriends"), {
     loading: () => <DotSpinner />,
     ssr: false,
   }),
-  dynamic(() => import("@/components/groups/StepToInvitation"), {
+  dynamic(() => import("@/features/groups/components/StepToInvitation"), {
     loading: () => <DotSpinner />,
     ssr: false,
   }),
-  dynamic(() => import("@/components/gathering/MakingInvitation"), {
+  dynamic(() => import("@/features/gathering/components/MakingInvitation"), {
     loading: () => <DotSpinner />,
     ssr: false,
   }),

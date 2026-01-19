@@ -1,9 +1,9 @@
 "use client";
 
-import Flex from "@/components/shared/Flex";
-import AlarmIcon from "@/components/shared/Icon/AlarmIcon";
-import Spacing from "@/components/shared/Spacing";
-import { lightyToast } from "@/utils/toast";
+import Flex from "@/shared/components/Flex";
+import AlarmIcon from "@/shared/components/Icon/AlarmIcon";
+import Spacing from "@/shared/components/Spacing";
+import { lightyToast } from "@/shared/utils/toast";
 
 // Error boundaries must be Client Components
 

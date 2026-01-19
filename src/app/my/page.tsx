@@ -1,8 +1,8 @@
 "use client";
-import SettingsMenu from "@/components/my/SettingsMenu";
-import MyMainInfo from "@/components/my/MyMainInfo";
-import UserProfile from "@/components/my/UserProfile";
-import Spacing from "@/components/shared/Spacing";
+import SettingsMenu from "@/features/my/components/SettingsMenu";
+import MyMainInfo from "@/features/my/components/MyMainInfo";
+import UserProfile from "@/features/my/components/UserProfile";
+import Spacing from "@/shared/components/Spacing";
 import clsx from "clsx";
 import React, {
   Suspense,
@@ -11,23 +11,23 @@ import React, {
   useRef,
   useState,
 } from "react";
-import Header from "@/components/layout/Header/Header";
-import useUserDetail from "@/components/users/hooks/useUserDetail";
-import { useAuth } from "@/components/shared/providers/AuthProvider";
-import DotSpinner from "@/components/shared/Spinner/DotSpinner";
+import Header from "@/shared/layout/Header/Header";
+import useUserDetail from "@/features/users/components/hooks/useUserDetail";
+import { useAuth } from "@/shared/components/providers/AuthProvider";
+import DotSpinner from "@/shared/components/Spinner/DotSpinner";
 import {
   openAskMobile,
   openPrivacyPolicyMobile,
   openSuggestMobile,
   openTermsMobile,
 } from "@/webview/actions";
-import { useReactNativeWebView } from "@/components/shared/providers/ReactNativeWebViewProvider";
-import { getLogout } from "@/remote/auth";
-import STORAGE_KEYS from "@/constants/storageKeys";
+import { useReactNativeWebView } from "@/shared/components/providers/ReactNativeWebViewProvider";
+import { getLogout } from "@/features/auth/api/auth";
+import STORAGE_KEYS from "@/shared/constants/storageKeys";
 import { WEBVIEW_EVENT } from "@/webview/types/events";
-import { logger } from "@/utils/logger";
-import { deleteUser } from "@/remote/users";
-import { useAnyScrollThreshold } from "@/hooks/useScrollThreshold";
+import { logger } from "@/shared/utils/logger";
+import { deleteUser } from "@/features/users/api/users";
+import { useAnyScrollThreshold } from "@/shared/hooks/useScrollThreshold";
 
 const MyHeader = React.memo(({ shadow }: { shadow: boolean }) => {
   return (

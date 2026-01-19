@@ -2,28 +2,29 @@
 
 import React, { Suspense, useEffect, useRef, useState } from "react";
 import { GatheringInWhich } from "@/models/gathering";
-import { gatheringModalStateAtom, newGatheringInfo } from "@/atoms/gathering";
+import { gatheringModalStateAtom, newGatheringInfo } from "@/features/gathering/state/gathering";
 import { useRecoilState, useResetRecoilState } from "recoil";
 import clsx from "clsx";
-import { useTabs } from "@/hooks/useTabs";
-import useGatheringEnded from "@/components/gathering/hooks/useGatheringEnded";
-import { useInfiniteScrollByRef } from "@/hooks/useInfiniteScroll";
+import { useTabs } from "@/shared/hooks/useTabs";
+import useGatheringEnded from "@/features/gathering/components/hooks/useGatheringEnded";
+import { useInfiniteScrollByRef } from "@/shared/hooks/useInfiniteScroll";
 import { useQueryClient } from "@tanstack/react-query";
-import { lightyToast } from "@/utils/toast";
-import Schedule from "@/components/schedule/Schedule";
-import Gathering from "@/components/gathering/Gathering";
-import DotSpinnerSmall from "@/components/shared/Spinner/DotSpinnerSmall";
+import { lightyToast } from "@/shared/utils/toast";
+import Schedule from "@/features/schedule/components/Schedule";
+import Gathering from "@/features/gathering/components/Gathering";
+import DotSpinnerSmall from "@/shared/components/Spinner/DotSpinnerSmall";
 import dynamic from "next/dynamic";
-import TabParamHandler from "@/components/shared/TabParamHandler";
-import { GatheringHeader } from "@/components/layout/Header/ScrollAwareHeader";
-import { useScrollDirection } from "@/hooks/useScrollDirection";
-import useGatheringAll from "@/components/gathering/hooks/useGatheringAll";
-import Spacing from "@/components/shared/Spacing";
-import NoGathering from "@/components/gathering/NoGathering";
-import { useScrollRestorationOfRef } from "@/hooks/useScrollRestorationOfRef";
+import TabParamHandler from "@/shared/components/TabParamHandler";
+import { GatheringHeader } from "@/shared/layout/Header/ScrollAwareHeader";
+import { useScrollDirection } from "@/shared/hooks/useScrollDirection";
+import useGatheringAll from "@/features/gathering/components/hooks/useGatheringAll";
+import Spacing from "@/shared/components/Spacing";
+import NoGathering from "@/features/gathering/components/NoGathering";
+import { useScrollRestorationOfRef } from "@/shared/hooks/useScrollRestorationOfRef";
+import { queryKeys } from "@/lib/queryKeys";
 
 const MemoriesBottomSheet = dynamic(
-  () => import("@/components/shared/BottomDrawer/MemoriesBottomSheet"),
+  () => import("@/shared/components/BottomDrawer/MemoriesBottomSheet"),
   { ssr: false }
 );
 
@@ -77,10 +78,10 @@ export default function GatheringPage() {
     try {
       await Promise.all([
         queryClient.invalidateQueries({
-          queryKey: ["gatherings/all"],
+          queryKey: queryKeys.gathering.all(),
         }),
         queryClient.invalidateQueries({
-          queryKey: ["gatherings/ended"],
+          queryKey: queryKeys.gathering.ended(),
         }),
       ]);
       return true;

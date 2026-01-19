@@ -1,17 +1,18 @@
 "use client";
-import useUpdateAccountId from "@/components/my/hooks/usePatchAccountId";
-import useUpdateProfile from "@/components/my/hooks/useUpdateProfile";
-import FixedBottomButton from "@/components/shared/Button/FixedBottomButton";
-import Flex from "@/components/shared/Flex";
-import HeaderWithBtn from "@/components/layout/Header/HeaderWithBtn";
-import Input from "@/components/shared/Input/Input";
-import ProfileImageDisplay from "@/components/shared/ProfileImageDisplay";
-import Spacing from "@/components/shared/Spacing";
-import DotSpinner from "@/components/shared/Spinner/DotSpinner";
-import useUserDetail from "@/components/users/hooks/useUserDetail";
-import { lightyToast } from "@/utils/toast";
+import useUpdateAccountId from "@/features/my/components/hooks/usePatchAccountId";
+import useUpdateProfile from "@/features/my/components/hooks/useUpdateProfile";
+import FixedBottomButton from "@/shared/components/Button/FixedBottomButton";
+import Flex from "@/shared/components/Flex";
+import HeaderWithBtn from "@/shared/layout/Header/HeaderWithBtn";
+import Input from "@/shared/components/Input/Input";
+import ProfileImageDisplay from "@/shared/components/ProfileImageDisplay";
+import Spacing from "@/shared/components/Spacing";
+import DotSpinner from "@/shared/components/Spinner/DotSpinner";
+import useUserDetail from "@/features/users/components/hooks/useUserDetail";
+import { lightyToast } from "@/shared/utils/toast";
 import { useQueryClient } from "@tanstack/react-query";
 import { Suspense, useState } from "react";
+import { queryKeys } from "@/lib/queryKeys";
 
 export default function EditPage() {
   const { data } = useUserDetail();
@@ -29,10 +30,10 @@ export default function EditPage() {
       lightyToast.success(data.message);
       await Promise.all([
         queryClient.invalidateQueries({
-          queryKey: ["user/detail"],
+          queryKey: queryKeys.user.detail(),
         }),
         queryClient.invalidateQueries({
-          queryKey: ["user/profile/alarm"],
+          queryKey: queryKeys.user.profile(),
         }),
       ]);
     },
@@ -44,10 +45,10 @@ export default function EditPage() {
       lightyToast.success(data.message);
       await Promise.all([
         queryClient.invalidateQueries({
-          queryKey: ["user/detail"],
+          queryKey: queryKeys.user.detail(),
         }),
         queryClient.invalidateQueries({
-          queryKey: ["groups"],
+          queryKey: queryKeys.group.list(),
         }),
       ]);
     },

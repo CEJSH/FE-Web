@@ -1,7 +1,7 @@
-import HeaderWithBtn from "@/components/layout/Header/HeaderWithBtn";
-import LightyIcon from "@/components/shared/Icon/LightyIcon";
-import Spacing from "@/components/shared/Spacing";
-import SignupForm from "@/components/SignupForm";
+import HeaderWithBtn from "@/shared/layout/Header/HeaderWithBtn";
+import LightyIcon from "@/shared/components/Icon/LightyIcon";
+import Spacing from "@/shared/components/Spacing";
+import SignupForm from "@/features/auth/components/SignupForm";
 import { Suspense } from "react";
 
 export default function SignupPage() {

@@ -1,18 +1,25 @@
 "use client";
 import { useRecoilState } from "recoil";
-import TabButton from "@/components/shared/Panel/TabButton";
-import { BottomLine } from "@/components/shared/BottomLine";
-import { modalStateAtom, reportInfoAtom, reportModalAtom } from "@/atoms/modal";
+import TabButton from "@/shared/components/Panel/TabButton";
+import { BottomLine } from "@/shared/components/BottomLine";
+import { modalStateAtom, reportInfoAtom, reportModalAtom } from "@/shared/state/modal";
 import { Suspense } from "react";
-import useInfiniteScroll from "@/hooks/useInfiniteScroll";
-import { bottomSheetStateAtom } from "@/atoms/feed";
-import HeaderWithBtn from "@/components/layout/Header/HeaderWithBtn";
-import Spacing from "@/components/shared/Spacing";
-import CommentContainer from "@/components/shared/Comment/CommentContainer";
-import { FeedList } from "@/components/feeds/FeedPage/FeedList";
-import useHiddenFeed from "@/components/feeds/hooks/useHiddenFeed";
-import { NoFeedHidden } from "@/components/feeds/NoFeed";
-import ModalWithReport from "@/components/shared/ModalWithReport";
+import useInfiniteScroll from "@/shared/hooks/useInfiniteScroll";
+import { bottomSheetStateAtom } from "@/features/feed/state/feed";
+import HeaderWithBtn from "@/shared/layout/Header/HeaderWithBtn";
+import Spacing from "@/shared/components/Spacing";
+import dynamic from "next/dynamic";
+import { FeedList } from "@/features/feed/components/FeedPage/FeedList";
+import useHiddenFeed from "@/features/feed/components/hooks/useHiddenFeed";
+import { NoFeedHidden } from "@/features/feed/components/NoFeed";
+const CommentContainer = dynamic(
+  () => import("@/shared/components/Comment/CommentContainer"),
+  { ssr: false }
+);
+const ModalWithReport = dynamic(
+  () => import("@/shared/components/ModalWithReport"),
+  { ssr: false }
+);
 
 export default function FeedPage() {
   const {
@@ -22,7 +29,6 @@ export default function FeedPage() {
     displayFeed,
     reportComment,
     deleteComment,
-    handleFeedSelect,
     feedId,
   } = useHiddenFeed();
 
@@ -59,7 +65,6 @@ export default function FeedPage() {
             <FeedList
               feeds={hiddenFeed}
               userInfo={false}
-              onFeedSelect={handleFeedSelect}
               isFetching={isFetching}
               isMine={true}
             />

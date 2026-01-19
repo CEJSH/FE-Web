@@ -1,50 +1,47 @@
 "use client";
 import { Suspense, useEffect, useState } from "react";
-import { useRecoilValue } from "recoil";
 import type * as lighty from "lighty-type";
-import useEditGathering from "@/components/gathering/hooks/useEditGathering";
-import { lightyToast } from "@/utils/toast";
-import { useRouter } from "next/navigation";
-import { selectedGatheringInfoAtom } from "@/atoms/gathering";
-import GatheringEditForm from "@/components/gathering/GatheringEditForm";
-import EditGatheringStatus from "@/components/gathering/EditGatheringStatus";
+import useEditGathering from "@/features/gathering/components/hooks/useEditGathering";
+import { lightyToast } from "@/shared/utils/toast";
+import { useRouter, useSearchParams } from "next/navigation";
+import GatheringEditForm from "@/features/gathering/components/GatheringEditForm";
+import EditGatheringStatus from "@/features/gathering/components/EditGatheringStatus";
 import { useQueryClient } from "@tanstack/react-query";
-import DotSpinner from "@/components/shared/Spinner/DotSpinner";
-import HeaderWithBtn from "@/components/layout/Header/HeaderWithBtn";
+import DotSpinner from "@/shared/components/Spinner/DotSpinner";
+import HeaderWithBtn from "@/shared/layout/Header/HeaderWithBtn";
+import useGatheringDetail from "@/features/gathering/components/hooks/useGatheringDetail";
+import { queryKeys } from "@/lib/queryKeys";
 
 export default function GatheringEditPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const queryClient = useQueryClient();
   const [step, setStep] = useState(1);
-  const originalGatheringValue = useRecoilValue(selectedGatheringInfoAtom);
-  const selectedGatheringId = originalGatheringValue?.id;
-
-  const INITIAL_FORM_STATE: Partial<lighty.CreateGatheringRequest> = {
-    name: originalGatheringValue?.name || "",
-    description: originalGatheringValue?.description || "",
-    gatheringDate: originalGatheringValue?.gatheringDate || "",
-    address: originalGatheringValue?.address || "",
-  };
+  const selectedGatheringId = searchParams.get("id") ?? "";
+  const { data: selectedGathering } = useGatheringDetail({
+    id: selectedGatheringId,
+  });
 
   const editSuccessHandler = async (data: { message: string }) => {
     await Promise.all([
       queryClient.invalidateQueries({
-        queryKey: ["gatherings/all"],
+        queryKey: queryKeys.gathering.all(),
       }),
       queryClient.invalidateQueries({
-        queryKey: ["gathering/detail", selectedGatheringId],
+        queryKey: queryKeys.gathering.detail(selectedGatheringId ?? ""),
       }),
     ]);
     router.replace("/gathering");
     lightyToast.success(data.message);
   };
 
-  const [gatheringInfo, setGatheringInfo] =
-    useState<Partial<lighty.CreateGatheringRequest>>(INITIAL_FORM_STATE);
+  const [gatheringInfo, setGatheringInfo] = useState<
+    Partial<lighty.CreateGatheringRequest>
+  >({});
 
   const { mutate: editingFeed, isPending } = useEditGathering({
     gathering: gatheringInfo,
-    gatheringId: selectedGatheringId || "",
+    gatheringId: selectedGatheringId,
     onSuccess: editSuccessHandler,
     onError: (error) => {
       lightyToast.error(error.message);
@@ -52,13 +49,28 @@ export default function GatheringEditPage() {
   });
 
   useEffect(() => {
-    if (!originalGatheringValue) {
+    if (!selectedGatheringId) {
       router.replace("/gathering");
       lightyToast.error("약속 정보를 찾을 수 없습니다.");
     }
-  }, [originalGatheringValue, router]);
+  }, [router, selectedGatheringId]);
 
-  if (!originalGatheringValue || originalGatheringValue == null) return null;
+  useEffect(() => {
+    if (!selectedGathering) return;
+    setGatheringInfo((prev) =>
+      Object.keys(prev).length > 0
+        ? prev
+        : {
+            name: selectedGathering.name ?? "",
+            description: selectedGathering.description ?? "",
+            gatheringDate: selectedGathering.gatheringDate ?? "",
+            address: selectedGathering.address ?? "",
+          }
+    );
+  }, [selectedGathering]);
+
+  if (!selectedGatheringId) return null;
+  if (!selectedGathering) return <DotSpinner />;
 
   if (isPending || step === 0) {
     return <EditGatheringStatus isPending={isPending} setStep={setStep} />;
