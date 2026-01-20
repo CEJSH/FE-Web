@@ -7,7 +7,7 @@ import GatheringInput from "@/shared/components/Input/GatheringInput";
 import { formatToKoreanTime } from "@/shared/utils/makeUTC";
 import MapPinIcon from "@/shared/components/Icon/MapPinIcon";
 import FixedBottomButton from "@/shared/components/Button/FixedBottomButton";
-import CalendarBottomSheet from "@/shared/components/BottomDrawer/CalendarBottomSheet";
+import CalendarBottomSheet from "@/features/gathering/components/BottomDrawer/CalendarBottomSheet";
 import { isValid } from "date-fns";
 import PencilIcon from "@/shared/components/Icon/PencilIcon";
 import CalendarIcon from "@/shared/components/Icon/CalendarIcon";

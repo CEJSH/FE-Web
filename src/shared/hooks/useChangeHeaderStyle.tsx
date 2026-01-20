@@ -1,4 +1,4 @@
-import { useEffect, useCallback, useMemo } from "react";
+import { useEffect } from "react";
 import { useScrollNew } from "./useScrollNew";
 import { useSetRecoilState } from "recoil";
 import { scrollProgressAtom } from "@/shared/state/scroll";
@@ -10,18 +10,11 @@ export default function useChangeHeaderStyle({
 }) {
   const setScrollProgress = useSetRecoilState(scrollProgressAtom);
 
-  const scrollContainer = useMemo(
-    () => (scrollReady ? "scrollable-container" : undefined),
-    [scrollReady]
-  );
+  const scrollContainer = scrollReady ? "scrollable-container" : undefined;
 
   const { scrollProgress } = useScrollNew(scrollContainer, 92);
 
-  const updateScrollState = useCallback(() => {
+  useEffect(() => {
     setScrollProgress(scrollProgress);
   }, [scrollProgress, setScrollProgress]);
-
-  useEffect(() => {
-    updateScrollState();
-  }, [updateScrollState]);
 }

@@ -5,17 +5,25 @@ import React, {
   useState,
   useEffect,
   useCallback,
+  useRef,
 } from "react";
 import STORAGE_KEYS from "@/shared/constants/storageKeys";
 import { UserInfo } from "@/models/user";
 import type * as lighty from "lighty-type";
 import { getUserAuth } from "@/features/auth/api/auth";
 import useUserProfile from "@/features/users/components/hooks/useUserProfile";
+import { useQueryClient } from "@tanstack/react-query";
+import { queryKeys } from "@/lib/queryKeys";
 import {
   clearAuthStorage,
   getStoredAuth,
   saveAuthToStorage,
 } from "@/shared/utils/authStorage";
+import {
+  createSyncFromStorageHandler,
+  initializeAuthState,
+  readStoredUserInfo,
+} from "./authHelpers";
 
 export type UserInfoMini = Pick<UserInfo, "accountId" | "profileImageUrl">;
 
@@ -43,6 +51,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const [isInitialized, setIsInitialized] = useState(false);
   const [userDeleted, setUserDeleted] = useState(false);
   const { data: userProfile } = useUserProfile({ enabled: !!token });
+  const queryClient = useQueryClient();
+  const prevTokenRef = useRef<string | null>(null);
 
   const logout = useCallback(() => {
     clearAuthStorage();
@@ -50,20 +60,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     setUserInfo(null);
   }, []);
 
-  const readStoredUserInfo = useCallback((): UserInfoMini | null => {
-    if (typeof window === "undefined") return null;
-    const raw = localStorage.getItem(STORAGE_KEYS.USER_INFO);
-    if (!raw) return null;
-    try {
-      const parsed = JSON.parse(raw) as Partial<UserInfoMini> | null;
-      if (!parsed?.accountId) return null;
-      return {
-        accountId: parsed.accountId,
-        profileImageUrl: parsed.profileImageUrl ?? null,
-      };
-    } catch {
-      return null;
-    }
+  const readStoredUserInfoCb = useCallback((): UserInfoMini | null => {
+    return readStoredUserInfo();
   }, []);
 
   const updateUserInfo = useCallback(async () => {
@@ -105,28 +103,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     let cancelled = false;
     const initializeAuth = async () => {
       const storedToken = localStorage.getItem(STORAGE_KEYS.AUTH_TOKEN);
-      setToken(storedToken);
-      setUserInfo(readStoredUserInfo());
-
-      if (storedToken) {
-        setIsInitialized(true);
-        return;
-      }
-
+      const storedUser = readStoredUserInfoCb();
       try {
-        const storedAuth = await getStoredAuth();
-        if (cancelled) return;
-        if (!storedAuth?.token) return;
-        setToken(storedAuth.token);
-        if (storedAuth.userInfo) {
-          setUserInfo(storedAuth.userInfo);
-        }
+        await initializeAuthState({
+          storedToken,
+          storedUserInfo: storedUser,
+          getStoredAuth,
+          setToken,
+          setUserInfo,
+          setIsInitialized,
+          signalCancelled: () => cancelled,
+        });
       } catch (err) {
         console.error("Auth 초기화 실패:", err);
-      } finally {
-        if (!cancelled) {
-          setIsInitialized(true);
-        }
+        if (!cancelled) setIsInitialized(true);
       }
     };
 
@@ -135,13 +125,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     return () => {
       cancelled = true;
     };
-  }, [readStoredUserInfo]);
+  }, [readStoredUserInfoCb]);
 
   useEffect(() => {
-    const syncFromStorage = () => {
-      setToken(localStorage.getItem(STORAGE_KEYS.AUTH_TOKEN));
-      setUserInfo(readStoredUserInfo());
-    };
+    if (prevTokenRef.current && !token) {
+      queryClient.removeQueries({ queryKey: queryKeys.root() });
+    }
+    prevTokenRef.current = token;
+  }, [queryClient, token]);
+
+  useEffect(() => {
+    const syncFromStorage = createSyncFromStorageHandler(
+      setToken,
+      setUserInfo,
+      readStoredUserInfoCb
+    );
 
     window.addEventListener("lighty:auth-changed", syncFromStorage);
     window.addEventListener("storage", syncFromStorage);
@@ -149,7 +147,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       window.removeEventListener("lighty:auth-changed", syncFromStorage);
       window.removeEventListener("storage", syncFromStorage);
     };
-  }, [readStoredUserInfo]);
+  }, [readStoredUserInfoCb]);
 
   useEffect(() => {
     if (!isInitialized) return;

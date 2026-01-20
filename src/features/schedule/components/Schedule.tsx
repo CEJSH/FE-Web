@@ -1,5 +1,5 @@
 import UpcomingSchedule from "@/features/schedule/components/UpcomingSchedule";
-import LightyCalendarWithBorder from "@/shared/components/Calender/CalendarWithBorder";
+import LightyCalendarWithBorder from "@/features/gathering/components/Calender/CalendarWithBorder";
 import Spacing from "@/shared/components/Spacing";
 import { Gathering } from "@/models/gathering";
 import React from "react";

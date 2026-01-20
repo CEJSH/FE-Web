@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import dynamic from "next/dynamic";
 import FeedForDisplay from "@/features/feed/components/FeedForDisplay";
@@ -106,8 +106,6 @@ const FeedSwiperComponent = ({
   scrollContainerRef,
   scrollContainerRefMine,
 }: FeedSwiperProps) => {
-  const emptyAll = useMemo(() => <FeedForDisplay />, []);
-  const emptyMine = useMemo(() => <NoFeed />, []);
   const handleSwiper = useCallback(
     (swiper: React.MutableRefObject<any>["current"]) => {
       swiperRef.current = swiper;
@@ -139,7 +137,7 @@ const FeedSwiperComponent = ({
           loadMoreRef={loadMoreRef}
           scrollRef={scrollContainerRef}
           userInfo={userInfo}
-          emptyComponent={emptyAll}
+          emptyComponent={<FeedForDisplay />}
         />
       </SwiperSlide>
 
@@ -152,7 +150,7 @@ const FeedSwiperComponent = ({
           scrollRef={scrollContainerRefMine}
           userInfo={userInfo}
           isMine
-          emptyComponent={emptyMine}
+          emptyComponent={<NoFeed />}
         />
       </SwiperSlide>
     </Swiper>

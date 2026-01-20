@@ -5,7 +5,7 @@ import FixedBottomButton from "@/shared/components/Button/FixedBottomButton";
 import Flex from "@/shared/components/Flex";
 import HeaderWithBtn from "@/shared/layout/Header/HeaderWithBtn";
 import Input from "@/shared/components/Input/Input";
-import ProfileImageDisplay from "@/shared/components/ProfileImageDisplay";
+import ProfileImageDisplay from "@/features/my/components/ProfileImageDisplay";
 import Spacing from "@/shared/components/Spacing";
 import DotSpinner from "@/shared/components/Spinner/DotSpinner";
 import useUserDetail from "@/features/users/components/hooks/useUserDetail";

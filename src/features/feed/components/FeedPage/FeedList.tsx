@@ -1,9 +1,9 @@
-import React, { useCallback } from "react";
+import React from "react";
 // import { useInfiniteScrollByRef } from "@/shared/hooks/useInfiniteScroll";
 import { useDropdown, useFriendsBox } from "@/shared/hooks/useDropdown";
 import FeedCard from "@/features/feed/components/FeedCard";
 import InfoBar, { FriendsInfoContainer } from "@/features/feed/components/InfoBar";
-import FeedDropdownMenu from "@/shared/components/DropDownMenu/FeedDropDownMenu";
+import FeedDropdownMenu from "@/features/feed/components/DropDownMenu/FeedDropDownMenu";
 import OptionsSelectIcon from "@/shared/components/Icon/OptionsSelectIcon";
 import DotSpinnerSmall from "@/shared/components/Spinner/DotSpinnerSmall";
 import { MENU_CONFIGS } from "@/shared/constants/menu-configs";
@@ -38,30 +38,27 @@ const FeedListComponent: React.FC<FeedListProps> = ({
   const { openedBoxId, friendsRef, fBtnRef, toggleBox, closeBox } =
     useFriendsBox();
 
-  const handleListClick = useCallback(
-    (e: React.MouseEvent<HTMLElement>) => {
-      closeDropdown(e);
-      closeBox();
-    },
-    [closeDropdown, closeBox]
-  );
+  const handleListClick = (e: React.MouseEvent<HTMLElement>) => {
+    closeDropdown(e);
+    closeBox();
+  };
 
-  const handleToggleBox = useCallback(
-    (e: React.MouseEvent<HTMLButtonElement>, feedId: string) => {
-      e.stopPropagation();
-      toggleBox(feedId);
-    },
-    [toggleBox]
-  );
+  const handleToggleBox = (
+    e: React.MouseEvent<HTMLButtonElement>,
+    feedId: string
+  ) => {
+    e.stopPropagation();
+    toggleBox(feedId);
+  };
 
-  const handleOpenMenu = useCallback(
-    (e: React.MouseEvent<HTMLButtonElement>, feedId: string) => {
-      e.stopPropagation();
-      toggleDropdown(feedId);
-      setSelectedFeedId(feedId);
-    },
-    [setSelectedFeedId, toggleDropdown]
-  );
+  const handleOpenMenu = (
+    e: React.MouseEvent<HTMLButtonElement>,
+    feedId: string
+  ) => {
+    e.stopPropagation();
+    toggleDropdown(feedId);
+    setSelectedFeedId(feedId);
+  };
 
   return (
     <div

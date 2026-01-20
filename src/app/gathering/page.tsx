@@ -24,7 +24,7 @@ import { useScrollRestorationOfRef } from "@/shared/hooks/useScrollRestorationOf
 import { queryKeys } from "@/lib/queryKeys";
 
 const MemoriesBottomSheet = dynamic(
-  () => import("@/shared/components/BottomDrawer/MemoriesBottomSheet"),
+  () => import("@/features/feed/components/BottomDrawer/MemoriesBottomSheet"),
   { ssr: false }
 );
 

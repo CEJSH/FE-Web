@@ -1,7 +1,7 @@
 import React from "react";
 import { useDropdownWithNoId } from "@/shared/hooks/useDropdown";
 import { OptionsSelectIconSmall } from "./Icon/OptionsSelectIcon";
-import FriendDropdownMenu from "./DropDownMenu/FriendDropDownMenu";
+import FriendDropdownMenu from "@/features/friends/components/DropDownMenu/FriendDropDownMenu";
 import { MENU_TYPES } from "@/models/dropdown";
 import { MENU_CONFIGS } from "@/shared/constants/menu-configs";
 

@@ -1,5 +1,5 @@
 import SelectFriendsContainer from "@/features/friends/components/SelectFriendsContainer";
-import SearchInput from "@/shared/components/Input/SearchBar";
+import SearchInput from "@/features/search/components/SearchBar";
 import Spacing from "@/shared/components/Spacing";
 import { Dispatch, SetStateAction } from "react";
 import type * as lighty from "lighty-type";

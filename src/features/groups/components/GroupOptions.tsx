@@ -1,7 +1,7 @@
 import React from "react";
 import { useDropdownWithNoId } from "@/shared/hooks/useDropdown";
 import OptionsSelectIcon from "@/shared/components/Icon/OptionsSelectIcon";
-import GroupDropdownMenu from "@/shared/components/DropDownMenu/GroupDropDownMenu";
+import GroupDropdownMenu from "@/features/groups/components/DropDownMenu/GroupDropDownMenu";
 import { GroupEditProps } from "@/app/groups/detail/page";
 
 export default function GroupOptions({

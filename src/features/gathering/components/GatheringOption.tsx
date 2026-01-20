@@ -1,7 +1,7 @@
 import React from "react";
 import { useDropdownWithNoId } from "@/shared/hooks/useDropdown";
 import OptionsSelectIcon from "@/shared/components/Icon/OptionsSelectIcon";
-import GatheringDropdownMenu from "@/shared/components/DropDownMenu/GatheringDropDownMenu";
+import GatheringDropdownMenu from "@/features/gathering/components/DropDownMenu/GatheringDropDownMenu";
 import { MENU_TYPES, MenuType } from "@/models/dropdown";
 import { GatheringDetailResponse } from "@/models/gathering";
 import { MENU_CONFIGS } from "@/shared/constants/menu-configs";

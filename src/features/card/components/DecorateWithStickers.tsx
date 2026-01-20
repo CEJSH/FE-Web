@@ -13,7 +13,7 @@ import Flex from "@/shared/components/Flex";
 import DecoStickerBottomSheet from "@/shared/components/BottomDrawer/DecoStickerBottomSheet";
 import cropAndResizeImage from "@/shared/utils/cropAndResizeImage";
 import { format } from "date-fns";
-import FloatingButton from "@/shared/components/Button/FloatingButton";
+import FloatingButton from "@/features/navigation/components/FloatingButton";
 import BottomButton from "@/shared/components/Button/BottomButton";
 import PhotoSaveBottomSheet from "@/shared/components/BottomDrawer/PhotoSaveBottomSheet";
 import { useReactNativeWebView } from "@/shared/components/providers/ReactNativeWebViewProvider";

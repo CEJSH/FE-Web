@@ -1,5 +1,5 @@
 "use client";
-import SearchInput from "@/shared/components/Input/SearchBar";
+import SearchInput from "@/features/search/components/SearchBar";
 import Spacing from "@/shared/components/Spacing";
 import { userSearchAtom } from "@/features/friends/state/friends";
 import { useRecoilValue } from "recoil";

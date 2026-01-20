@@ -12,7 +12,7 @@ import MapPinIcon from "@/shared/components/Icon/MapPinIcon";
 import FixedBottomButton from "@/shared/components/Button/FixedBottomButton";
 import { isValid } from "date-fns";
 import EmptyLogoIcon from "@/shared/components/Icon/EmptyLogoIcon";
-import AnimatedTabButton from "@/shared/components/Button/AnimatedTabButton";
+import AnimatedTabButton from "@/features/gathering/components/Button/AnimatedTabButton";
 import PencilIcon from "@/shared/components/Icon/PencilIcon";
 import CalendarIcon from "@/shared/components/Icon/CalendarIcon";
 import { SetterOrUpdater } from "recoil";
@@ -26,7 +26,7 @@ const AddFriendsSlider = dynamic(() => import("@/features/groups/components/AddF
   ssr: false,
 });
 const CalendarBottomSheet = dynamic(
-  () => import("@/shared/components/BottomDrawer/CalendarBottomSheet"),
+  () => import("@/features/gathering/components/BottomDrawer/CalendarBottomSheet"),
   { ssr: false }
 );
 

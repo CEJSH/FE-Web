@@ -13,7 +13,7 @@ import { FeedList } from "@/features/feed/components/FeedPage/FeedList";
 import useHiddenFeed from "@/features/feed/components/hooks/useHiddenFeed";
 import { NoFeedHidden } from "@/features/feed/components/NoFeed";
 const CommentContainer = dynamic(
-  () => import("@/shared/components/Comment/CommentContainer"),
+  () => import("@/features/feed/components/Comment/CommentContainer"),
   { ssr: false }
 );
 const ModalWithReport = dynamic(

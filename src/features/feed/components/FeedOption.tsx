@@ -2,7 +2,7 @@ import { Feed } from "@/models/feed";
 import { MENU_TYPES, MenuType } from "@/models/dropdown";
 import { useDropdown } from "@/shared/hooks/useDropdown";
 import OptionsSelectIcon from "@/shared/components/Icon/OptionsSelectIcon";
-import FeedDropdownMenu from "@/shared/components/DropDownMenu/FeedDropDownMenu";
+import FeedDropdownMenu from "@/features/feed/components/DropDownMenu/FeedDropDownMenu";
 import { useAuth } from "@/shared/components/providers/AuthProvider";
 import { MENU_CONFIGS } from "@/shared/constants/menu-configs";
 

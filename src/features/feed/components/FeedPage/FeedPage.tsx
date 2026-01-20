@@ -21,11 +21,11 @@ import { useNotificationListener } from "@/features/feed/components/hooks/useNot
 import { FeedSwiper } from "@/features/feed/components/FeedPage/FeedSwiper";
 
 const CommentContainer = dynamic(
-  () => import("@/shared/components/Comment/CommentContainer"),
+  () => import("@/features/feed/components/Comment/CommentContainer"),
   { ssr: false }
 );
 const MemoriesBottomSheet = dynamic(
-  () => import("@/shared/components/BottomDrawer/MemoriesBottomSheet"),
+  () => import("@/features/feed/components/BottomDrawer/MemoriesBottomSheet"),
   { ssr: false }
 );
 const ModalWithReport = dynamic(

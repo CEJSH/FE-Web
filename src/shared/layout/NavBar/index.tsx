@@ -1,4 +1,4 @@
-import { useMemo, memo, useEffect, useState, Suspense } from "react";
+import React, { memo, Suspense } from "react";
 import NAV_ITEMS from "@/shared/constants/navBar";
 import { useActiveNavigation } from "@/shared/hooks/useActiveNavigation";
 import { NavLink } from "./NavLink";
@@ -8,7 +8,7 @@ import clsx from "clsx";
 import { useReactNativeWebView } from "@/shared/components/providers/ReactNativeWebViewProvider";
 
 const FloatingButton = dynamic(
-  () => import("@/shared/components/Button/FloatingButton"),
+  () => import("@/features/navigation/components/FloatingButton"),
   {
     ssr: false,
   }
@@ -20,14 +20,10 @@ const SHOW_SHEET_PATHS = ["/feed"];
 const NavBar = () => {
   const { data: user } = useUserProfile();
   const { pathname, activeBtn } = useActiveNavigation();
-  const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
   const { isReactNativeWebView } = useReactNativeWebView();
-  const showSheetButton = useMemo(() => {
-    return (
-      SHOW_SHEET_PATHS.some((path) => pathname.startsWith(path)) ||
-      pathname.endsWith("/gathering")
-    );
-  }, [pathname]);
+  const showSheetButton =
+    SHOW_SHEET_PATHS.some((path) => pathname.startsWith(path)) ||
+    pathname.endsWith("/gathering");
 
   const tooltip = !user?.hasFeed;
 
@@ -50,21 +46,9 @@ const NavBar = () => {
       isActive={activeBtn === idx}
       onMouseDown={() => onMouseDownHandler(idx)}
       icon={item.icon}
-      profileImageUrl={profileImageUrl}
+      profileImageUrl={user?.profileImageUrl ?? null}
     />
   ));
-
-  const shouldShowFloatingButton = useMemo(() => {
-    return showSheetButton;
-  }, [showSheetButton, pathname]);
-
-  useEffect(() => {
-    if (!profileImageUrl) {
-      if (user?.profileImageUrl) {
-        setProfileImageUrl(user.profileImageUrl);
-      }
-    }
-  }, [profileImageUrl, user]);
 
   if (!user) {
     return null;
@@ -92,7 +76,7 @@ const NavBar = () => {
             </li>
           ))}
         </ul>
-        {shouldShowFloatingButton && <FloatingButton tooltip={tooltip} />}
+        {showSheetButton && <FloatingButton tooltip={tooltip} />}
       </nav>
     </Suspense>
   );

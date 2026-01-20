@@ -2,7 +2,7 @@ import React from "react";
 import { useDropdown } from "@/shared/hooks/useDropdown";
 import { Feed } from "@/models/feed";
 import { OptionsSelectIconXSmall } from "@/shared/components/Icon/OptionsSelectIcon";
-import CommentDropdownMenu from "@/shared/components/DropDownMenu/CommentDropDownMenu";
+import CommentDropdownMenu from "@/features/feed/components/DropDownMenu/CommentDropDownMenu";
 import { MENU_CONFIGS } from "@/shared/constants/menu-configs";
 
 interface OptionsProps {

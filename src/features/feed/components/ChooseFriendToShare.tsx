@@ -1,5 +1,5 @@
 import React, { Dispatch, SetStateAction } from "react";
-import SearchInput from "@/shared/components/Input/SearchBar";
+import SearchInput from "@/features/search/components/SearchBar";
 import LightyIcon from "@/shared/components/Icon/LightyIcon";
 import Flex from "@/shared/components/Flex";
 import SelectFriendsContainer from "@/features/friends/components/SelectFriendsContainer";

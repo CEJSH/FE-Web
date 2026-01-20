@@ -1,5 +1,14 @@
 import STORAGE_KEYS from "@/shared/constants/storageKeys";
 
+const parseStoredUserInfo = (raw: string | null) => {
+  if (!raw) return null;
+  try {
+    return JSON.parse(raw);
+  } catch {
+    return null;
+  }
+};
+
 export const getStoredAuth = async () => {
   if (typeof window === "undefined") return null;
 
@@ -8,10 +17,12 @@ export const getStoredAuth = async () => {
   for (let i = 0; i < 3; i++) {
     const token = localStorage.getItem(STORAGE_KEYS.AUTH_TOKEN);
     if (token) {
-      const userInfo = localStorage.getItem(STORAGE_KEYS.USER_INFO);
+      const userInfo = parseStoredUserInfo(
+        localStorage.getItem(STORAGE_KEYS.USER_INFO)
+      );
       return {
         token,
-        userInfo: userInfo ? JSON.parse(userInfo) : null,
+        userInfo,
       };
     }
     await new Promise((resolve) => setTimeout(resolve, 100));
@@ -26,6 +37,13 @@ export const saveAuthToStorage = (
 ) => {
   localStorage.setItem(STORAGE_KEYS.AUTH_TOKEN, token);
   localStorage.setItem(STORAGE_KEYS.USER_INFO, JSON.stringify(userInfo));
+  if (typeof window !== "undefined") {
+    window.dispatchEvent(new Event("lighty:auth-changed"));
+  }
+};
+
+export const updateAuthToken = (token: string) => {
+  localStorage.setItem(STORAGE_KEYS.AUTH_TOKEN, token);
   if (typeof window !== "undefined") {
     window.dispatchEvent(new Event("lighty:auth-changed"));
   }

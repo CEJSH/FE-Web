@@ -8,7 +8,7 @@ import HeaderWithBtn from "@/shared/layout/Header/HeaderWithBtn";
 import FeedCard from "@/features/feed/components/FeedCard";
 import InfoBar, { FriendsInfoContainer } from "@/features/feed/components/InfoBar";
 import OptionsSelectIcon from "@/shared/components/Icon/OptionsSelectIcon";
-import FeedDropdownMenu from "@/shared/components/DropDownMenu/FeedDropDownMenu";
+import FeedDropdownMenu from "@/features/feed/components/DropDownMenu/FeedDropDownMenu";
 import DotSpinnerSmall from "@/shared/components/Spinner/DotSpinnerSmall";
 import { MENU_CONFIGS } from "@/shared/constants/menu-configs";
 import { useDropdown, useFriendsBox } from "@/shared/hooks/useDropdown";
@@ -20,7 +20,7 @@ import dynamic from "next/dynamic";
 import useFeed from "@/features/feed/hooks/useFeed";
 
 const CommentContainer = dynamic(
-  () => import("@/shared/components/Comment/CommentContainer"),
+  () => import("@/features/feed/components/Comment/CommentContainer"),
   { ssr: false }
 );
 const ModalWithReport = dynamic(

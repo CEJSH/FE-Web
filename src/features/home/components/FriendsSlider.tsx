@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
 import Flex from "@/shared/components/Flex";
 import Spacing from "@/shared/components/Spacing";
 import FriendItem, { AddFriendItem, SeeMoreItem } from "./FriendItem";
@@ -16,10 +16,7 @@ export default function FriendsSlider() {
     userId: userInfo?.accountId ?? "",
   });
 
-  const displayedFriends = useMemo(
-    () => (hide ? data.slice(0, 12) : data),
-    [data, hide]
-  );
+  const displayedFriends = hide ? data.slice(0, 12) : data;
 
   const renderFriends = () =>
     displayedFriends.map((friend, i) => (
